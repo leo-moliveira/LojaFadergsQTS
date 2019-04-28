@@ -102,13 +102,33 @@ include_once 'model/produto.class.php';
             $vendasDB = new VendaDB;
             $vendasDB->adicionaProduto($v);
           }
-          //////
+
+          if(isset($_POST['finalizaVenda'])){
+            $finaliza = new VendaDB;
+
+            $finaliza->finalizaVenda($_POST['inputVendaID']);
+            unset($_POST['retomaVenda']);
+            unset($_POST['finalizaVenda']);
+
+            ?>
+            <script type="text/javascript">javascript:alert('Venda Finaliza!');</script>
+            <script type="text/javascript">window.location.href = 'vendas.php';</script>
+            <?php
+
+          }
+
+            if(isset($_POST['VOLTAR'])){
+              ?>
+              <script type="text/javascript">window.location.href = 'vendas.php';</script>
+              <?php
+            }
             $vendasDB = new VendaDB;
             $array = $vendasDB->buscaVenda($venda->id);?>
 
         <p class="h3">Venda</p>
         <div class="container py-2 mt-2 mb-2">
-          <div class="py-2">
+          <div class="row py-2 ">
+          <div class="col-md-3">
             <button type="button" name="addProduto" data-toggle="modal" data-target="#addProdutoModal" class="btn btn-primary text-white"><i class="fas fa-cart-arrow-down"> Adiciona Produto</i></button>
 
             <div class="modal fade" id="addProdutoModal" tabindex="-1" role="dialog" aria-labelledby="addProdutoModal" aria-hidden="true">
@@ -149,10 +169,22 @@ include_once 'model/produto.class.php';
                 </div>
               </div>
             </div>
-
-            <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-shopping-cart"> Finaliza Venda</i></button>
-            <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancela Venda</i></button>
-            <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-arrow-circle-left"> Voltar</i></button>
+            </div>
+            <div class="col-md-3">
+              <form id="finalizaVenda" action="" method="post">
+                <input type="hidden" id="retomaVenda" name="retomaVenda" value="retomaVenda">
+                <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf($_POST['inputVendaID']); ?>">
+                <button type="submit" name="finalizaVenda" class="btn btn-primary text-white"><i class="fas fa-shopping-cart"> Finaliza Venda</i></button>
+              </form>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancela Venda</i></button>
+            </div>
+            <div class="col-md-3">
+              <form id="voltar" action="" method="post">
+                <button type="submit" name="VOLTAR" class="btn btn-primary text-white"><i class="fas fa-arrow-circle-left"> Voltar</i></button>
+              </form>
+            </div>
           </div>
             <div class="table-responsive">
               <table class="table table-striped">

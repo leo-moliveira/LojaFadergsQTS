@@ -260,6 +260,18 @@ class VendaDB{
           echo "Erro ao cadastrar usuário! ".$ex;
       }//Fecha catch
     }
+
+    public function finalizaVenda($id){
+      try {
+          $stat = $this->conexao->prepare("UPDATE `vendas` SET `status`= 1 WHERE id = ?");
+          $stat->bindValue(1,$id);
+          $stat->execute();
+          $this->conexao = null;
+      } catch (PDOException $ex) {
+          echo "Erro ao cadastrar usuário! ".$ex;
+      }//Fecha catch
+    }
+
   }
 /* ########################################################################################################################################################################## */
 ?>
