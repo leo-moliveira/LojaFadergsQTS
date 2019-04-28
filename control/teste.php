@@ -174,7 +174,7 @@ INSERT INTO `vendas`(`id`, `status`) VALUES (3,0);
                       <table class="table table-striped">*/
 
 
-
+/*
 SELECT vendas.id, produtos.Nome as 'produto', vendas.status, vendaprodutos.quantidade FROM vendas
                                 LEFT JOIN vendaprodutos ON vendaprodutos.idVendas=vendas.id
                                 LEFT JOIN produtos ON vendaprodutos.idProduto=produtos.id WHERE vendas.id = $id
@@ -187,5 +187,20 @@ WHERE vendaprodutos.idVendas=1
 
 UPDATE `produtos` SET `Vendas`= `Vendas` - (SELECT quantidade FROM `vendaprodutos` WHERE idVendas = 2 ),`EstqLoja` = `EstqLoja` + (SELECT quantidade FROM `vendaprodutos` WHERE idVendas = $v)
 
+UPDATE produtos
+INNER JOIN vendaprodutos
+  ON produtos.id = vendaprodutos.idProduto
+SET
+  produtos.vendas = produtos.vendas - vendaprodutos.quantidade,
+  produtos.EstqLoja = produtos.EstqLoja + vendaprodutos.quantidade
 
+WHERE
+  vendaprodutos.idVendas = 2
+*/
+
+$venda = new VendaDB;
+
+$venda= $venda->incluiVenda();
+var_dump($venda);
+echo $venda['AUTO_INCREMENT'];
 ?>

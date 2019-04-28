@@ -115,6 +115,12 @@ include_once 'model/produto.class.php';
             <script type="text/javascript">window.location.href = 'vendas.php';</script>
             <?php
     } //fim if testa POST exlusão
+
+    if(isset($_POST['addVenda'])){ //inicio if testa
+      $venda = new VendaDB;
+      $venda= $venda->incluiVenda();
+      $_POST['inputVendaID']=$venda['AUTO_INCREMENT'];
+      } //fim if testa POST exlusão
     ?>
     <div class="jumbotron text-center">
       <?php if(isset($_POST['retomaVenda'])){ //inicio if testa retomar venda pendente
@@ -190,6 +196,7 @@ include_once 'model/produto.class.php';
             <button type="button" name="addProduto" data-toggle="modal" data-target="#addProdutoModal" class="btn btn-primary text-white"><i class="fas fa-cart-arrow-down"> Adiciona Produto</i></button>
 
             <div class="modal fade" id="addProdutoModal" tabindex="-1" role="dialog" aria-labelledby="addProdutoModal" aria-hidden="true">
+
               <div class="modal-dialog" role="form">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -199,6 +206,7 @@ include_once 'model/produto.class.php';
                     </button>
                   </div>
                   <div class="modal-body">
+
                     <div class="alert alert-info" role="alert"> Selecione o produto e informe a quantidade </div>
                     <div>
                       <form id="addProdutoModal" action="" method="post">
@@ -354,9 +362,16 @@ include_once 'model/produto.class.php';
         </div>
       </div>
     <?php } else { //fim if testa retomar venda pendente inicio else tela vendas?>
+
       <p class="h3">Vendas - Pendentes</p>
       <div class="container py-4 mt-2 mb-2">
         <div class="table-responsive">
+          <div class=" py-2">
+             <form id="addVendaForm" action="" method="post">
+               <input type="hidden" id="retomaVenda" name="retomaVenda" value="retomaVenda">
+              <button type="submit" name="addVenda" id="btn-addProdutoModal" value="addVenda" class="btn btn-primary ml-2 text-white"><i class="fas fa-cart-arrow-down"> Incluir Venda</i>
+              </form>
+          </div>
           <table class="table table-striped">
             <thead>
               <th>#</th>
@@ -364,7 +379,12 @@ include_once 'model/produto.class.php';
               <th class="text-center" colspan="3">Ação</th>
             </thead>
           <tbody>
-          <?php foreach($array as $a){ //inicio imprimi vendas vendentes?>
+
+          <?php
+          $contC = 0;
+          foreach($array as $a){ //inicio imprimi vendas vendentes
+            $contC = $contC + 1;
+            ?>
             <tr>
               <?php if($a->status==0){ //inicio if status da venda pra serpareção?>
                 <th scope="row"><?php printf("$a->id");?></th>
@@ -382,9 +402,9 @@ include_once 'model/produto.class.php';
                     //inicio teste para modal efetuado cancelar venda
                     if($u->Grupo != "Administrador") {?>
                       <!-- Button trigger modal -->
-                      <button type="button" name="cancelarVenda" data-toggle="modal" data-target="#cancelarVendaModal" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancelar venda</i></button>
+                      <button type="button" name="cancelarVenda<?php printf("$contC") ?>" data-toggle="modal" data-target="#cancelarVendaModal<?php printf("$contC") ?>" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancelar venda</i></button>
                       <!-- Modal -->
-                      <div class="modal fade" id="cancelarVendaModal" tabindex="-1" role="dialog" aria-labelledby="cancelarVendaModal" aria-hidden="true">
+                      <div class="modal fade" id="cancelarVendaModal<?php printf("$contC") ?>" tabindex="-1" role="dialog" aria-labelledby="cancelarVendaModal<?php printf("$contC") ?>" aria-hidden="true">
                         <div class="modal-dialog" role="form">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -414,7 +434,7 @@ include_once 'model/produto.class.php';
                       </div>
                     <?php }else{  // fim if vendedor botao modal
                       ?>
-                      <form id="cancelarVenda" action="" method="post">
+                      <form id="cancelarVenda<?php printf("$contC") ?>" action="" method="post">
                           <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf("$a->id"); ?>">
                           <button type="submit" name="cancelarVenda" id="btn-loginModal" value="cancelarVenda" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar venda</i>
                         </form>

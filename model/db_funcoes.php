@@ -268,6 +268,16 @@ class VendaDB{
           $stat = $this->conexao->prepare("UPDATE `vendas` SET `status`= 1 WHERE id = ?");
           $stat->bindValue(1,$id);
           $stat->execute();
+          $stat = $this->conexao->prepare("UPDATE produtos
+                                            INNER JOIN vendaprodutos
+                                              ON produtos.id = vendaprodutos.idProduto
+                                            SET
+                                              produtos.vendas = produtos.vendas + vendaprodutos.quantidade,
+                                              produtos.EstqLoja = produtos.EstqLoja - vendaprodutos.quantidade
+
+                                            WHERE
+                                              vendaprodutos.idVendas = $id");
+          $stat->execute();
           $this->conexao = null;
       } catch (PDOException $ex) {
           echo "Erro ao cadastrar usuário! ".$ex;
@@ -297,6 +307,21 @@ class VendaDB{
       }//Fecha catch
     }
 
+    public function incluiVenda(){
+      try {
+          $stat = $this->conexao->prepare("INSERT INTO `vendas`(`id`, `status`) VALUES (NULL,0)");
+          $stat->execute();
+          $stat = $this->conexao->query("SELECT AUTO_INCREMENT
+                                          FROM   information_schema.tables
+                                          WHERE  table_name = 'vendas'
+                                          AND    table_schema = 'estqcontrole' ;");
+          $id = $stat->fetch();
+          $this->conexao = null;
+      } catch (PDOException $ex) {
+          echo "Erro ao cadastrar usuário! ".$ex;
+      }//Fecha catch
+      return $id;
+    }
 
   }
 /* ########################################################################################################################################################################## */
