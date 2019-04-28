@@ -2,9 +2,10 @@
 session_start();
 ob_start();
 include 'model/db_funcoes.php';
-include_once 'model/usuario.class.php';
 include 'control/lib.php';
+include_once 'model/usuario.class.php';
 include_once 'model/venda.class.php';
+include_once 'model/produto.class.php';
 ?>
 <!DOCTYPE html>
 <html><head>
@@ -95,11 +96,50 @@ include_once 'model/venda.class.php';
             $array = $vendasDB->buscaVenda($venda->id);?>
 
         <p class="h3">Venda</p>
-        <div class="container py-4 mt-2 mb-2">
-          <div>
-            <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-cart-arrow-down"> Adiciona Produto</i></button>
+        <div class="container py-2 mt-2 mb-2">
+          <div class="py-2">
+            <button type="button" name="addProduto" data-toggle="modal" data-target="#addProdutoModal" class="btn btn-primary text-white"><i class="fas fa-cart-arrow-down"> Adiciona Produto</i></button>
+
+            <div class="modal fade" id="addProdutoModal" tabindex="-1" role="dialog" aria-labelledby="addProdutoModal" aria-hidden="true">
+              <div class="modal-dialog" role="form">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title fas fa-cart-arrow-down" id="addProduto"> Adicionar Produto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="alert alert-info" role="alert"> Selecione o produto e informe a quantidade </div>
+                    <div>
+                      <form>
+                        <div class="form-group">
+                         <select class="custom-select" id="inputPordutoModal" name="inputPordutoModal">
+                      <?php
+                      $produtoDB = new ProdutoDB;
+                      $arrayp = $produtoDB->listaProdutos();
+                      foreach($arrayp as $a){?>
+                        <option value="<?php printf("$a->Nome")?>"><?php printf("$a->Nome")?></option>
+                      <?php }?>
+                      </select>
+                      </div>
+                      <div class="form-group">
+                        <input type="number" id="inputQuantidadeModal" name="inputQuantidadeModal" placeholder="Quantiade" min="1" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" name="addProdutoModal" id="btn-addProdutoModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-cart-arrow-down"> Adicionar Produto</i>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-shopping-cart"> Finaliza Venda</i></button>
             <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancela Venda</i></button>
+            <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-arrow-circle-left"> Voltar</i></button>
           </div>
             <div class="table-responsive">
               <table class="table table-striped">
@@ -157,7 +197,7 @@ include_once 'model/venda.class.php';
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                      <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Remove</i>
+                                      <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Remove</i>
                                       </form>
                                     </div>
                                   </div>
@@ -247,7 +287,7 @@ include_once 'model/venda.class.php';
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar</i>
+                              <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar</i>
                               </form>
                             </div>
                           </div>
@@ -257,7 +297,7 @@ include_once 'model/venda.class.php';
                       ?>
                       <form id="loginModal" action="" method="post">
                           <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
-                          <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar venda</i>
+                          <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar venda</i>
                         </form>
                     <?php } // Fim else admin botao modal?>
                 </td>
@@ -336,7 +376,7 @@ include_once 'model/venda.class.php';
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" name="exluirVenda" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir</i>
+                          <button type="submit" name="exluirVenda" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir</i>
                           </form>
                         </div>
                       </div>
@@ -346,7 +386,7 @@ include_once 'model/venda.class.php';
                   ?>
                   <form id="exluirVendaModal" action="" method="post">
                       <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
-                      <button type="submit" name="exluirVenda" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir venda</i>
+                      <button type="submit" name="exluirVenda" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir venda</i>
                     </form>
 
                 <?php } //fim else caso admin somente exlui?>
