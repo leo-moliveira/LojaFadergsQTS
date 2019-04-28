@@ -276,7 +276,20 @@ class VendaDB{
 
     public function excluiVenda($v){
       try {
-          $stat = $this->conexao->prepare("");
+        //printf($v); exit;
+          $stat = $this->conexao->prepare("UPDATE produtos
+                                            INNER JOIN vendaprodutos
+                                              ON produtos.id = vendaprodutos.idProduto
+                                            SET
+                                              produtos.vendas = produtos.vendas - vendaprodutos.quantidade,
+                                              produtos.EstqLoja = produtos.EstqLoja + vendaprodutos.quantidade
+
+                                            WHERE
+                                              vendaprodutos.idVendas = $v");
+          $stat->execute();
+          $stat = $this->conexao->prepare("DELETE FROM `vendaprodutos` WHERE idvendas = $v");
+          $stat->execute();
+          $stat = $this->conexao->prepare("DELETE FROM `vendas` WHERE id = $v");
           $stat->execute();
           $this->conexao = null;
       } catch (PDOException $ex) {

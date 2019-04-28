@@ -160,7 +160,7 @@ INSERT INTO `vendas`(`id`, `status`) VALUES (3,0);
                 INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,5,11);
                 INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,2,23);
                 INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,6,1111);
-                  */
+
                   $vendasDB = new VendaDB;
                   $array = $vendasDB->listaVendas();
                   foreach($array as $a){
@@ -168,6 +168,24 @@ INSERT INTO `vendas`(`id`, `status`) VALUES (3,0);
                     printf("$a->Produto\n");
                     printf("$a->Status\n");
                   }
+
+                  <div class="container py-4 mt-2 mb-2">
+                    <div class="table-responsive">
+                      <table class="table table-striped">*/
+
+
+
+SELECT vendas.id, produtos.Nome as 'produto', vendas.status, vendaprodutos.quantidade FROM vendas
+                                LEFT JOIN vendaprodutos ON vendaprodutos.idVendas=vendas.id
+                                LEFT JOIN produtos ON vendaprodutos.idProduto=produtos.id WHERE vendas.id = $id
+
+UPDATE `produtos` SET `Vendas`= `Vendas` - (SELECT quantidade FROM `vendaprodutos` WHERE idVendas = 2 ),`EstqLoja` = `EstqLoja` + (SELECT quantidade FROM `vendaprodutos` WHERE idVendas = 2)
+
+UPDATE produtos JOIN vendaprodutos ON vendaprodutos.idProduto=produtos.id
+SET `Vendas`= `Vendas` - (SELECT quantidade FROM `vendaprodutos` WHERE idVendas = 2 ),`EstqLoja` = `EstqLoja` + (SELECT quantidade FROM `vendaprodutos` WHERE idVendas = 2)
+WHERE vendaprodutos.idVendas=1
+
+UPDATE `produtos` SET `Vendas`= `Vendas` - (SELECT quantidade FROM `vendaprodutos` WHERE idVendas = 2 ),`EstqLoja` = `EstqLoja` + (SELECT quantidade FROM `vendaprodutos` WHERE idVendas = $v)
 
 
 ?>

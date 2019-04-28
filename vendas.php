@@ -90,20 +90,20 @@ include_once 'model/produto.class.php';
 
     }
     if(isset($_POST['exluirVenda'])){ //inicio if testa POST exlusão
+      $exV = $_POST['inputVendaID'];
       if($u->Grupo=='Administrador'){ //inicio if exlusão testa usuario admin
-        $u = new Usuario();
-        $u = unserialize($_SESSION['privateUser']);
       }else{ //fim if exlusão e pega modal caso não seja admin
         $Login = $_POST['inputLoginModal'];
         $Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
 
-        $u = new Usuario();
         $u->Login = $Login;
         $u->Senha = $Senha;
       } //fim else exclusao
       $uDB = new UsuarioDB();
       $usuario = $uDB->verificaUsuario($u);
           if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ //inicio teste para excluir
+            $exVenda = new VendaDB();
+            $exVenda->excluiVenda($exV);
             ?>
             <script>javascript:alert('Venda Excluida!');</script>
             <?php
@@ -111,6 +111,9 @@ include_once 'model/produto.class.php';
             <script>javascript:alert('Usuário ou senha incorretos ou você não tem permissão para executar esta ação, veda não será excluida!');</script>
           <?php } //fim else caso erro ou usuario errado
             unset($_POST['exluirVendaModal']);
+            ?>
+            <script type="text/javascript">window.location.href = 'vendas.php';</script>
+            <?php
     } //fim if testa POST exlusão
     ?>
     <div class="jumbotron text-center">
@@ -433,7 +436,7 @@ include_once 'model/produto.class.php';
             <thead>
               <th>#</th>
               <th>Protudos</th>
-              <th>Ação</th>
+              <th class="text-center" colspan="3">Ação</th>
             </thead>
           <tbody>
           <?php foreach($array as $a){ //inicio imprimi vendas eftuadas?>
@@ -460,7 +463,7 @@ include_once 'model/produto.class.php';
                           <div class="alert alert-danger" role="alert"> Necessário ser administrador para excluir venda! </div>
                               <form id="exluirVendaModal" action="" method="post">
                                   <div class="form-group ">
-                                      <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
+                                      <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf("$a->id"); ?>">
                                       <input type="int" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
                                   </div>
                                   <div class="form-group">
@@ -478,7 +481,7 @@ include_once 'model/produto.class.php';
                 <?php }else{ //fim if testa permissão excluir venda mostra modal caso nao seja admin incio else caso admin somente exlui
                   ?>
                   <form id="exluirVendaModal" action="" method="post">
-                      <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
+                      <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf("$a->id"); ?>">
                       <button type="submit" name="exluirVenda" id="btn-loginModal" value="exluirVenda" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir venda</i>
                     </form>
 
