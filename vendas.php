@@ -88,7 +88,31 @@ include_once 'model/produto.class.php';
         <script type="text/javascript">window.location.href = 'vendas.php';</script>
         <?php
 
-    }?>
+    }
+    if(isset($_POST['exluirVenda'])){ //inicio if testa POST exlusão
+      if($u->Grupo=='Administrador'){ //inicio if exlusão testa usuario admin
+        $u = new Usuario();
+        $u = unserialize($_SESSION['privateUser']);
+      }else{ //fim if exlusão e pega modal caso não seja admin
+        $Login = $_POST['inputLoginModal'];
+        $Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
+
+        $u = new Usuario();
+        $u->Login = $Login;
+        $u->Senha = $Senha;
+      } //fim else exclusao
+      $uDB = new UsuarioDB();
+      $usuario = $uDB->verificaUsuario($u);
+          if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ //inicio teste para excluir
+            ?>
+            <script>javascript:alert('Venda Excluida!');</script>
+            <?php
+          }else { //fim teste para excluir inicio else caso erro ou usuario errado ?>
+            <script>javascript:alert('Usuário ou senha incorretos ou você não tem permissão para executar esta ação, veda não será excluida!');</script>
+          <?php } //fim else caso erro ou usuario errado
+            unset($_POST['exluirVendaModal']);
+    } //fim if testa POST exlusão
+    ?>
     <div class="jumbotron text-center">
       <?php if(isset($_POST['retomaVenda'])){ //inicio if testa retomar venda pendente
         $venda = new Venda;
@@ -341,7 +365,9 @@ include_once 'model/produto.class.php';
             <tr>
               <?php if($a->status==0){ //inicio if status da venda pra serpareção?>
                 <th scope="row"><?php printf("$a->id");?></th>
-                <td><?php printf ("$a->produto");?></td>
+                <td><?php if ($a->produto == NULL){
+                                printf (" ");
+                              }else{printf ("$a->produto");}?></td>
                 <td class="text-right">
                   <form id="retomaVenda" action="" method="post">
                     <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf("$a->id"); ?>">
@@ -417,29 +443,6 @@ include_once 'model/produto.class.php';
                 <td><?php printf ("$a->produto")?></td>
                 <td>
                 <?php
-                if(isset($_POST['exluirVenda'])){ //inicio if testa POST exlusão
-                  if($u->Grupo=='Administrador'){ //inicio if exlusão testa usuario admin
-                    $u = new Usuario();
-                    $u = unserialize($_SESSION['privateUser']);
-                  }else{ //fim if exlusão e pega modal caso não seja admin
-                    $Login = $_POST['inputLoginModal'];
-                    $Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
-
-                    $u = new Usuario();
-                    $u->Login = $Login;
-                    $u->Senha = $Senha;
-                  } //fim else exclusao
-                  $uDB = new UsuarioDB();
-                  $usuario = $uDB->verificaUsuario($u);
-                      if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ //inicio teste para excluir
-                        ?>
-                        <script>javascript:alert('Venda Excluida!');</script>
-                        <?php
-                      }else { //fim teste para excluir inicio else caso erro ou usuario errado ?>
-                        <script>javascript:alert('Houve um erro ao excluir a veda!');</script>
-                      <?php } //fim else caso erro ou usuario errado
-                        unset($_POST['loginModal']);
-                } //fim if testa POST exlusão
                 if($u->Grupo != "Administrador") { //inicio if testa permissão excluir venda mostra modal caso nao seja admin?>
                   <!-- Button trigger modal -->
                   <td class"text-right"><button type="button" name="exluirVenda" data-toggle="modal" data-target="#exluirVendaModal" class="btn btn-primary text-white"><i class="far fa-trash-alt"> Excluir venda</i></button><td>
@@ -455,7 +458,7 @@ include_once 'model/produto.class.php';
                         </div>
                         <div class="modal-body">
                           <div class="alert alert-danger" role="alert"> Necessário ser administrador para excluir venda! </div>
-                              <form id="loginModal" action="" method="post">
+                              <form id="exluirVendaModal" action="" method="post">
                                   <div class="form-group ">
                                       <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
                                       <input type="int" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
@@ -466,7 +469,7 @@ include_once 'model/produto.class.php';
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" name="exluirVenda" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir</i>
+                          <button type="submit" name="exluirVenda" id="btn-loginModal" value="exluirVenda" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir</i>
                           </form>
                         </div>
                       </div>
@@ -476,7 +479,7 @@ include_once 'model/produto.class.php';
                   ?>
                   <form id="exluirVendaModal" action="" method="post">
                       <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
-                      <button type="submit" name="exluirVenda" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir venda</i>
+                      <button type="submit" name="exluirVenda" id="btn-loginModal" value="exluirVenda" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir venda</i>
                     </form>
 
                 <?php } //fim else caso admin somente exlui?>

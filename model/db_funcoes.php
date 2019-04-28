@@ -202,9 +202,9 @@ class VendaDB{
     public function __destruct(){}
 
     public function listaVendas(){
-      $query ="SELECT vendas.id, group_concat( produtos.Nome SEPARATOR ' / ' )  as 'produto', vendas.status FROM vendas
-                JOIN vendaprodutos ON vendaprodutos.idVendas=vendas.id
-                JOIN produtos ON vendaprodutos.idProduto=produtos.id GROUP BY vendas.id";
+      $query ="SELECT vendas.id, group_concat( COALESCE(NULL, produtos.Nome, 'None') SEPARATOR ' / ' )  as 'produto', vendas.status FROM vendas
+                      LEFT JOIN vendaprodutos ON vendaprodutos.idVendas=vendas.id
+                      LEFT JOIN produtos ON vendaprodutos.idProduto=produtos.id GROUP BY vendas.id";
     try {
          $stat = $this->conexao->query("$query");
          $array = $stat->fetchAll(PDO::FETCH_CLASS, 'Venda');
@@ -216,8 +216,8 @@ class VendaDB{
 
     public function buscaVenda($id){
       $query ="SELECT vendas.id, produtos.Nome as 'produto', vendas.status, vendaprodutos.quantidade FROM vendas
-                JOIN vendaprodutos ON vendaprodutos.idVendas=vendas.id
-                JOIN produtos ON vendaprodutos.idProduto=produtos.id WHERE vendas.id = $id";
+                LEFT JOIN vendaprodutos ON vendaprodutos.idVendas=vendas.id
+                LEFT JOIN produtos ON vendaprodutos.idProduto=produtos.id WHERE vendas.id = $id";
       try {
          $stat = $this->conexao->query("$query");
          $array = $stat->fetchAll(PDO::FETCH_CLASS, 'Venda');
@@ -273,6 +273,17 @@ class VendaDB{
           echo "Erro ao cadastrar usuário! ".$ex;
       }//Fecha catch
     }
+
+    public function excluiVenda($v){
+      try {
+          $stat = $this->conexao->prepare("");
+          $stat->execute();
+          $this->conexao = null;
+      } catch (PDOException $ex) {
+          echo "Erro ao cadastrar usuário! ".$ex;
+      }//Fecha catch
+    }
+
 
   }
 /* ########################################################################################################################################################################## */

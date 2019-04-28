@@ -1,4 +1,6 @@
 <?php
+include '../model/db_funcoes.php';
+include '../model/venda.class.php';
 
 /*
 include 'usuario.class.php';
@@ -136,10 +138,9 @@ foreach($array as $a){
               echo "</tr>";
               echo "</table>";
             }
-            */
 
-            include '../model/db_funcoes.php';
-            include '../model/venda.class.php';
+
+
             $venda = new Venda;
             $venda->id = 3;
             $vendasDB = new VendaDB;
@@ -148,6 +149,25 @@ foreach($array as $a){
                 $venda->quantidade = 2;
 
                 $vendasDB->removeProduto($venda);
+INSERT INTO `vendas`(`id`, `status`) VALUES (3,0);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,4,3);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,5,1);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,2,2);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,4,1);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,5,6);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,6,2);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,6,1);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,5,11);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,2,23);
+                INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`) VALUES (3,6,1111);
+                  */
+                  $vendasDB = new VendaDB;
+                  $array = $vendasDB->listaVendas();
+                  foreach($array as $a){
+                    printf("$a->id\n");
+                    printf("$a->Produto\n");
+                    printf("$a->Status\n");
+                  }
 
 
 ?>
