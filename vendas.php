@@ -59,9 +59,40 @@ include_once 'model/venda.class.php';
   <div class="container py-4">
     <div class="jumbotron text-center">
       <?php if(isset($_POST['retomaVenda'])){ //inicio if testa retomar venda pendente
-        $vendaID = $_POST['inputVendaID'];
+        $venda = new Venda;
+        $venda->id = $_POST['inputVendaID'];
         $vendasDB = new VendaDB;
-        $array = $vendasDB->buscaVenda($vendaID); ?>
+          if(isset($_POST['removeProduto'])){
+            $venda->produto = $_POST['inputProdutoNome'];
+            $venda->status = $_POST['inputProdutoStatus'];
+            $venda->quantidade = $_POST['inputProdutoQuantidade'];
+
+            if($u->Grupo == "Operador"){
+              $Login = $_POST['inputLoginModal'];
+              $Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
+              $uTeste = new Usuario();
+              $uTeste->Login = $Login;
+              $uTeste->Senha = $Senha;
+              $uDB = new UsuarioDB();
+              $usuario = $uDB->verificaUsuario($uTeste);
+              if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){
+                $vendasDB->removeProduto($venda);
+                ?>
+                <script>javascript:alert('Produto Removido!');</script>
+                <?php
+              }else{?>
+                <script>javascript:alert('Usuário ou senha incorreta, Produto não removido!');</script>
+                <?php
+              }
+            }else{
+              $vendasDB->removeProduto($venda);
+              ?>
+              <script>javascript:alert('Produto Removido!');</script>
+              <?php
+            }
+          }
+            $vendasDB = new VendaDB;
+            $array = $vendasDB->buscaVenda($venda->id);?>
 
         <p class="h3">Venda</p>
         <div class="container py-4 mt-2 mb-2">
@@ -79,12 +110,62 @@ include_once 'model/venda.class.php';
                   <th class="text-center" colspan="3">Ação</th>
                 </thead>
                 <tbody>
-                  <?php foreach($array as $a){ //inicio for imprimi venda ?>
+                  <?php
+                  $cont = 0;
+                      foreach($array as $a){//inicio for imprimi venda
+                        $cont++;?>
                       <tr>
                         <th scope="row"><?php printf("$a->id");?></th>
                         <td><?php printf ("$a->produto");?></td>
                         <td><?php printf ("$a->quantidade");?></td>
-                        <td><button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-ban"> Remove produto</i></button></td>
+                        <td>
+                          <form id="removeProduto" action="" method="post">
+                            <input type="hidden" id="retomaVenda" name="retomaVenda" value="retomaVenda">
+                            <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf($a->id); ?>">
+                            <input type="hidden" id="inputProdutoNome" name="inputProdutoNome" value="<?php printf($a->produto); ?>">
+                            <input type="hidden" id="inputProdutoStatus" name="inputProdutoStatus" value="<?php printf($a->status); ?>">
+                            <input type="hidden" id="inputProdutoQuantidade" name="inputProdutoQuantidade" value="<?php printf($a->quantidade); ?>">
+                            <?php if($u->Grupo == "Administrador"){ //inicio testa cancela produto permissão?>
+                              <button type="submit" name="removeProduto" class="btn btn-primary text-white"><i class="fas fa-ban"> Remove produto</i></button>
+                            <?php }else{ //fim testa cancela produto permissão inicio else modal?>
+                              <button type="button" name="removeProduto<?php printf("$cont") ?>" data-toggle="modal" data-target="#removeProdutoModal<?php printf("$cont") ?>" class="btn btn-primary text-white"><i class="fas fa-ban"> Remove produto</i></button>
+                              <!-- Modal -->
+                              <div class="modal fade" id="removeProdutoModal<?php printf("$cont") ?>" tabindex="-1" role="dialog" aria-labelledby="removeProdutoModal<?php printf("$cont") ?>" aria-hidden="true">
+                                <div class="modal-dialog" role="form">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title fas fa-times" id="removeProduto"> Acesso Negado!</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="alert alert-danger" role="alert"> Necessário ser administrador para remover produto! </div>
+                                          <form id="loginModal" action="" method="post">
+                                              <div class="form-group ">
+                                                    <input type="hidden" id="retomaVenda" name="retomaVenda" value="retomaVenda">
+                                                    <input type="hidden" id="removeProduto" name="removeProduto" value="removeProduto">
+                                                    <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf($a->id); ?>">
+                                                    <input type="hidden" id="inputProdutoNome" name="inputProdutoNome" value="<?php printf($a->produto); ?>">
+                                                    <input type="hidden" id="inputProdutoQuantidade" name="inputProdutoQuantidade" value="<?php printf($a->quantidade); ?>">
+                                                    <input type="hidden" id="inputProdutoStatus" name="inputProdutoStatus" value="<?php printf($a->status); ?>">
+                                                  <input type="int" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
+                                              </div>
+                                              <div class="form-group">
+                                                  <input type="password" class="form-control" id="inputPasswordModal" name="inputPasswordModal" placeholder="Senha">
+                                              </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Remove</i>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            <?php } //fim else modal?>
+                          </form>
+                        </td>
                       </tr>
                   <?php } //fim for imprimi venda?>
                 </tbody>

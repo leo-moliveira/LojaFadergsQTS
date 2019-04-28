@@ -96,11 +96,11 @@ foreach($array as $a){
             }
 */
 
-
+/*
 include '../model/db_funcoes.php';
 include '../model/produto.class.php';
 
-/*
+
 $produto = new Produto;
 $produto->id=13;
 $produto->Nome="Fanta";
@@ -115,7 +115,7 @@ $produto->Fornecedor='Refris S.A';
 $produtoDB = new ProdutoDB;
 $array = $produtoDB->modificaProduto($produto);
 //$array = $produtoDB->listaProdutos();
-*/
+
 $produto = "BIS";
 $produtoDB = new ProdutoDB;
 $array = $produtoDB->buscaProduto($produto);
@@ -136,4 +136,18 @@ foreach($array as $a){
               echo "</tr>";
               echo "</table>";
             }
+            */
+
+            include '../model/db_funcoes.php';
+            include '../model/venda.class.php';
+            $venda = new Venda;
+            $venda->id = 3;
+            $vendasDB = new VendaDB;
+                $venda->produto = "Pepsi Cola 2L";
+                $venda->status = 0;
+                $venda->quantidade = 2;
+
+                $vendasDB->removeProduto($venda);
+
+
 ?>

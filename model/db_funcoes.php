@@ -227,14 +227,26 @@ class VendaDB{
        }//Fecha catch
     }
 
-    public function modifica(){
-
+    public function excluirVenda($venda){
+    /*  try {
+          $stat = $this->conexao->prepare("");
+          //$stat->execute();
+          $this->conexao = null;
+      } catch (PDOException $ex) {
+          echo "Erro ao cadastrar usuário! ".$ex;
+      }//Fecha catch*/
     }
 
-    public function alteraStatus(){
-
+    public function removeProduto($venda){
+      try {
+          $stat = $this->conexao->prepare("DELETE FROM vendaprodutos WHERE idVendas = $venda->id AND idProduto = (SELECT id FROM produtos WHERE nome like '$venda->produto') AND quantidade = $venda->quantidade");
+          $stat->execute();
+          $this->conexao = null;
+      } catch (PDOException $ex) {
+          echo "Erro ao cadastrar usuário! ".$ex;
+      }//Fecha catch
     }
+  }
 
-}
 /* ########################################################################################################################################################################## */
 ?>
