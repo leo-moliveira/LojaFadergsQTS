@@ -51,20 +51,48 @@ include_once 'model/venda.class.php';
 <!--Corpo-->
 <div  class="py-4">
   <?php
-  if(isset($_SESSION['privateUser'])){
+  if(isset($_SESSION['privateUser'])){ //inicio if testa usuario logado
           $u = unserialize($_SESSION['privateUser']);
           $vendasDB = new VendaDB;
           $array = $vendasDB->listaVendas();
           ?>
   <div class="container py-4">
     <div class="jumbotron text-center">
-      <?php if(isset($_POST['retomaVenda'])){ ?>
-        <p class="h3">Vendas</p>
+      <?php if(isset($_POST['retomaVenda'])){ //inicio if testa retomar venda pendente
+        $vendaID = $_POST['inputVendaID'];
+        $vendasDB = new VendaDB;
+        $array = $vendasDB->buscaVenda($vendaID); ?>
+
+        <p class="h3">Venda</p>
         <div class="container py-4 mt-2 mb-2">
-          <div class="table-responsive">
+          <div>
+            <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-cart-arrow-down"> Adiciona Produto</i></button>
+            <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-shopping-cart"> Finaliza Venda</i></button>
+            <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancela Venda</i></button>
           </div>
-        </di>
-      <?php } else { ?>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <th>#</th>
+                  <th>Protudo</th>
+                  <th>Quantidade</th>
+                  <th class="text-center" colspan="3">Ação</th>
+                </thead>
+                <tbody>
+                  <?php foreach($array as $a){ //inicio for imprimi venda ?>
+                      <tr>
+                        <th scope="row"><?php printf("$a->id");?></th>
+                        <td><?php printf ("$a->produto");?></td>
+                        <td><?php printf ("$a->quantidade");?></td>
+                        <td><button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-ban"> Remove produto</i></button></td>
+                      </tr>
+                  <?php } //fim for imprimi venda?>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <?php } else { //fim if testa retomar venda pendente inicio else tela vendas?>
       <p class="h3">Vendas - Pendentes</p>
       <div class="container py-4 mt-2 mb-2">
         <div class="table-responsive">
@@ -75,20 +103,20 @@ include_once 'model/venda.class.php';
               <th class="text-center" colspan="3">Ação</th>
             </thead>
           <tbody>
-          <?php foreach($array as $a){ ?>
+          <?php foreach($array as $a){ //inicio imprimi vendas vendentes?>
             <tr>
-              <?php if($a->status==0){?>
+              <?php if($a->status==0){ //inicio if status da venda pra serpareção?>
                 <th scope="row"><?php printf("$a->id");?></th>
                 <td><?php printf ("$a->produto");?></td>
                 <td class="text-right">
                   <form id="retomaVenda" action="" method="post">
-                    <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php ?>">
+                    <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf("$a->id"); ?>">
                     <button type="submit" name="retomaVenda" class="btn btn-primary text-white"><i class="fas fa-cart-arrow-down"> Remotar venda</i></button>
                   </form>
                 </td>
                 <td>
                     <?php
-                    if(isset($_POST['loginModal'])){
+                    if(isset($_POST['loginModal'])){ //inicio teste para modal efetuado cancelar venda
                       if($u->Grupo=='Administrador'){
                         $u = new Usuario();
                         $u = unserialize($_SESSION['privateUser']);
@@ -103,15 +131,15 @@ include_once 'model/venda.class.php';
 
                       $uDB = new UsuarioDB();
                       $usuario = $uDB->verificaUsuario($u);
-                          if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){
+                          if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ //inicio if cancelamento
                             ?>
                             <script>javascript:alert('Venda Cancelada!');</script>
                             <?php
-                          }else { ?>
+                          }else { //else cancelamento, erro ou login incorreto ?>
                             <script>javascript:alert('Houve um erro ao cancelar a veda!');</script>
                           <?php }
                             unset($_POST['loginModal']);
-                    }
+                    } //inicio teste para modal efetuado cancelar venda
                     if($u->Grupo != "Administrador") {?>
                       <!-- Button trigger modal -->
                       <button type="button" name="cancelarVenda" data-toggle="modal" data-target="#cancelarVendaModal" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancelar venda</i></button>
@@ -144,22 +172,22 @@ include_once 'model/venda.class.php';
                           </div>
                         </div>
                       </div>
-                    <?php }else{
+                    <?php }else{  // fim if vendedor botao modal
                       ?>
                       <form id="loginModal" action="" method="post">
                           <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
                           <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar venda</i>
                         </form>
-                    <?php } ?>
+                    <?php } // Fim else admin botao modal?>
                 </td>
-                <?php }?>
+              <?php } //Fim if status da venda pra serpareção?>
             </tr>
-        <?php } ?>
-      </tbody>
-          </table>
-          </div>
-        </div>
-    </div>
+          <?php } //fim imprimi vendas?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
     <div class="jumbotron text-center">
       <p class="h3">Vendas - Efetuadas</p>
       <div class="container py-4 mt-2 mb-2">
@@ -171,38 +199,37 @@ include_once 'model/venda.class.php';
               <th>Ação</th>
             </thead>
           <tbody>
-          <?php foreach($array as $a){ ?>
+          <?php foreach($array as $a){ //inicio imprimi vendas eftuadas?>
             <tr>
-              <?php if($a->status==1){?>
+              <?php if($a->status==1){ //inicio if para idendificação das vendas?>
                 <th scope="row"><?php printf("$a->id")?></th>
                 <td><?php printf ("$a->produto")?></td>
                 <td>
                 <?php
-                if(isset($_POST['exluirVenda'])){
-                  if($u->Grupo=='Administrador'){
+                if(isset($_POST['exluirVenda'])){ //inicio if testa POST exlusão
+                  if($u->Grupo=='Administrador'){ //inicio if exlusão testa usuario admin
                     $u = new Usuario();
                     $u = unserialize($_SESSION['privateUser']);
-                  }else{
+                  }else{ //fim if exlusão e pega modal caso não seja admin
                     $Login = $_POST['inputLoginModal'];
                     $Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
 
                     $u = new Usuario();
                     $u->Login = $Login;
                     $u->Senha = $Senha;
-                  }
-
+                  } //fim else exclusao
                   $uDB = new UsuarioDB();
                   $usuario = $uDB->verificaUsuario($u);
-                      if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){
+                      if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ //inicio teste para excluir
                         ?>
                         <script>javascript:alert('Venda Excluida!');</script>
                         <?php
-                      }else { ?>
+                      }else { //fim teste para excluir inicio else caso erro ou usuario errado ?>
                         <script>javascript:alert('Houve um erro ao excluir a veda!');</script>
-                      <?php }
+                      <?php } //fim else caso erro ou usuario errado
                         unset($_POST['loginModal']);
-                }
-                if($u->Grupo != "Administrador") {?>
+                } //fim if testa POST exlusão
+                if($u->Grupo != "Administrador") { //inicio if testa permissão excluir venda mostra modal caso nao seja admin?>
                   <!-- Button trigger modal -->
                   <td class"text-right"><button type="button" name="exluirVenda" data-toggle="modal" data-target="#exluirVendaModal" class="btn btn-primary text-white"><i class="far fa-trash-alt"> Excluir venda</i></button><td>
                   <!-- Modal -->
@@ -234,33 +261,36 @@ include_once 'model/venda.class.php';
                       </div>
                     </div>
                   </div>
-                <?php }else{
+                <?php }else{ //fim if testa permissão excluir venda mostra modal caso nao seja admin incio else caso admin somente exlui
                   ?>
                   <form id="exluirVendaModal" action="" method="post">
                       <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
                       <button type="submit" name="exluirVenda" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir venda</i>
                     </form>
 
-                <?php } ?>
+                <?php } //fim else caso admin somente exlui?>
               </td>
-              <?php } ?>
+              <?php } //inicio iff para idendificação das vendas ?>
             </tr>
-        <?php } ?>
+        <?php } //fim imprimi vendas eftuadas?>
       </tbody>
           </table>
           </div>
         </div>
     </div>
-  <?php } ?>
+<?php } //fim else tela vendas?>
   </div>
+</div>
   <?php
       if(isset($_POST['deslogar'])){
           unset($_SESSION['privateUser']);
           header("location:index.php");
         }
-  }else{
+
+  }else{ //fim if testa usuario logado
+    header("location:index.php");
   }?>
-</div>
+
 
 <!--Rodape-->
   <div class="py-3 footer">

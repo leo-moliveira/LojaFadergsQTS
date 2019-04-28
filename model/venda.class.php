@@ -3,6 +3,7 @@ class Venda{
   private $id;
   private $produto;
   private $status;
+  private $quantidade;
 
 
   public function __contruct(){}
@@ -16,7 +17,7 @@ class Venda{
   }//Fecha __set
 
   public function __toString(){
-    return nl2br("Venda: $this->id Status: $this->status Produto: $this->produto");
+    return nl2br("Venda: $this->id Status: $this->status Produto: $this->produto Quantidade: $this->quantidade");
   }//Fecha __toString
 }//Fecha class
 ?>

@@ -214,8 +214,17 @@ class VendaDB{
        }//Fecha catch
     }
 
-    public function cadastra(){
-
+    public function buscaVenda($id){
+      $query ="SELECT vendas.id, produtos.Nome as 'produto', vendas.status, vendaprodutos.quantidade FROM vendas
+                JOIN vendaprodutos ON vendaprodutos.idVendas=vendas.id
+                JOIN produtos ON vendaprodutos.idProduto=produtos.id WHERE vendas.id = $id";
+      try {
+         $stat = $this->conexao->query("$query");
+         $array = $stat->fetchAll(PDO::FETCH_CLASS, 'Venda');
+         return $array;
+       }catch(PDOException $pe){
+         echo "Erro ao Listar vendas!".$pe;
+       }//Fecha catch
     }
 
     public function modifica(){
