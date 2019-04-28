@@ -58,6 +58,13 @@ include_once 'model/venda.class.php';
           ?>
   <div class="container py-4">
     <div class="jumbotron text-center">
+      <?php if(isset($_POST['retomaVenda'])){ ?>
+        <p class="h3">Vendas</p>
+        <div class="container py-4 mt-2 mb-2">
+          <div class="table-responsive">
+          </div>
+        </di>
+      <?php } else { ?>
       <p class="h3">Vendas - Pendentes</p>
       <div class="container py-4 mt-2 mb-2">
         <div class="table-responsive">
@@ -169,6 +176,33 @@ include_once 'model/venda.class.php';
               <?php if($a->status==1){?>
                 <th scope="row"><?php printf("$a->id")?></th>
                 <td><?php printf ("$a->produto")?></td>
+                <td>
+                <?php
+                if(isset($_POST['exluirVenda'])){
+                  if($u->Grupo=='Administrador'){
+                    $u = new Usuario();
+                    $u = unserialize($_SESSION['privateUser']);
+                  }else{
+                    $Login = $_POST['inputLoginModal'];
+                    $Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
+
+                    $u = new Usuario();
+                    $u->Login = $Login;
+                    $u->Senha = $Senha;
+                  }
+
+                  $uDB = new UsuarioDB();
+                  $usuario = $uDB->verificaUsuario($u);
+                      if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){
+                        ?>
+                        <script>javascript:alert('Venda Excluida!');</script>
+                        <?php
+                      }else { ?>
+                        <script>javascript:alert('Houve um erro ao excluir a veda!');</script>
+                      <?php }
+                        unset($_POST['loginModal']);
+                }
+                if($u->Grupo != "Administrador") {?>
                   <!-- Button trigger modal -->
                   <td class"text-right"><button type="button" name="exluirVenda" data-toggle="modal" data-target="#exluirVendaModal" class="btn btn-primary text-white"><i class="far fa-trash-alt"> Excluir venda</i></button><td>
                   <!-- Modal -->
@@ -200,6 +234,15 @@ include_once 'model/venda.class.php';
                       </div>
                     </div>
                   </div>
+                <?php }else{
+                  ?>
+                  <form id="exluirVendaModal" action="" method="post">
+                      <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
+                      <button type="submit" name="exluirVenda" id="btn-loginModal" value="Entrar" class="btn navbar-btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Excluir venda</i>
+                    </form>
+
+                <?php } ?>
+              </td>
               <?php } ?>
             </tr>
         <?php } ?>
@@ -208,6 +251,7 @@ include_once 'model/venda.class.php';
           </div>
         </div>
     </div>
+  <?php } ?>
   </div>
   <?php
       if(isset($_POST['deslogar'])){
