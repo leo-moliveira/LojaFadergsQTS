@@ -58,6 +58,37 @@ include_once 'model/produto.class.php';
           $array = $vendasDB->listaVendas();
           ?>
   <div class="container py-4">
+    <?php
+    if(isset($_POST['cancelarVenda'])){       //inicio teste para modal efetuado cancelar venda
+      $idVenda = $_POST['inputVendaID'];
+      if($u->Grupo == 'Administrador'){
+      }else{
+        $Login = $_POST['inputLoginModal'];
+        $Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
+
+        $u->Login = $Login;
+        $u->Senha = $Senha;
+      }
+      $uDB = new UsuarioDB();
+      $usuario = $uDB->verificaUsuario($u);
+
+      if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ //inicio if cancelamento
+        $v = new VendaDB();
+        $v->cancelarVenda($idVenda);
+        ?>
+        <script>javascript:alert('Venda Cancelada!');</script>
+        <?php
+      }else { //else cancelamento, erro ou login incorreto
+        ?>
+        <script>javascript:alert('Usuário ou senha incorretos ou você não tem permissão para executar esta ação, Venda não será cancela!');</script>
+      <?php }
+        unset($_POST['loginModal']);
+        unset($_POST['retomaVenda']);
+        ?>
+        <script type="text/javascript">window.location.href = 'vendas.php';</script>
+        <?php
+
+    }?>
     <div class="jumbotron text-center">
       <?php if(isset($_POST['retomaVenda'])){ //inicio if testa retomar venda pendente
         $venda = new Venda;
@@ -178,7 +209,44 @@ include_once 'model/produto.class.php';
               </form>
             </div>
             <div class="col-md-3">
-              <button type="submit" name="" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancela Venda</i></button>
+              <?php
+              if($u->Grupo =="Administrador"){ ?>
+                <form id="cancelarVenda" action="" method="post">
+                  <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf($_POST['inputVendaID']); ?>">
+                  <button type="submit" name="cancelarVenda" class="btn btn-primary text-white" value="cancelarVenda"><i class="fas fa-ban"> Cancela Venda</i></button>
+                </form>
+              <?php }else{ ?>
+                <button type="button" name="cancelarVenda" data-toggle="modal" data-target="#cancelarVendaModal" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancela Venda</i></button>
+                <div class="modal fade" id="cancelarVendaModal" tabindex="-1" role="dialog" aria-labelledby="cancelarVendaModal" aria-hidden="true">
+                  <div class="modal-dialog" role="form">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title fas fa-times" id="cancelarVendaModal"> Acesso Negado!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="alert alert-danger" role="alert"> Necessário ser administrador para cancelar a venda! </div>
+                            <form id="cancelarVenda" action="" method="post">
+                                <div class="form-group ">
+                                    <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf($_POST['inputVendaID']); ?>">
+                                    <input type="int" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" id="inputPasswordModal" name="inputPasswordModal" placeholder="Senha">
+                                </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" name="cancelarVenda" id="btn-loginModal" value="cancecancelarVendalaVenda" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar</i>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <?php } ?>
+
             </div>
             <div class="col-md-3">
               <form id="voltar" action="" method="post">
@@ -282,30 +350,7 @@ include_once 'model/produto.class.php';
                 </td>
                 <td>
                     <?php
-                    if(isset($_POST['loginModal'])){ //inicio teste para modal efetuado cancelar venda
-                      if($u->Grupo=='Administrador'){
-                        $u = new Usuario();
-                        $u = unserialize($_SESSION['privateUser']);
-                      }else{
-                        $Login = $_POST['inputLoginModal'];
-                        $Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
-
-                        $u = new Usuario();
-                        $u->Login = $Login;
-                        $u->Senha = $Senha;
-                      }
-
-                      $uDB = new UsuarioDB();
-                      $usuario = $uDB->verificaUsuario($u);
-                          if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ //inicio if cancelamento
-                            ?>
-                            <script>javascript:alert('Venda Cancelada!');</script>
-                            <?php
-                          }else { //else cancelamento, erro ou login incorreto ?>
-                            <script>javascript:alert('Houve um erro ao cancelar a veda!');</script>
-                          <?php }
-                            unset($_POST['loginModal']);
-                    } //inicio teste para modal efetuado cancelar venda
+                    //inicio teste para modal efetuado cancelar venda
                     if($u->Grupo != "Administrador") {?>
                       <!-- Button trigger modal -->
                       <button type="button" name="cancelarVenda" data-toggle="modal" data-target="#cancelarVendaModal" class="btn btn-primary text-white"><i class="fas fa-ban"> Cancelar venda</i></button>
@@ -321,9 +366,9 @@ include_once 'model/produto.class.php';
                             </div>
                             <div class="modal-body">
                               <div class="alert alert-danger" role="alert"> Necessário ser administrador para cancelar a venda! </div>
-                                  <form id="loginModal" action="" method="post">
+                                  <form id="cancelarVenda" action="" method="post">
                                       <div class="form-group ">
-                                          <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
+                                          <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf("$a->id"); ?>">
                                           <input type="int" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
                                       </div>
                                       <div class="form-group">
@@ -332,7 +377,7 @@ include_once 'model/produto.class.php';
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar</i>
+                              <button type="submit" name="cancelarVenda" id="btn-loginModal" value="cancelarVenda" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar</i>
                               </form>
                             </div>
                           </div>
@@ -340,9 +385,9 @@ include_once 'model/produto.class.php';
                       </div>
                     <?php }else{  // fim if vendedor botao modal
                       ?>
-                      <form id="loginModal" action="" method="post">
-                          <input type="hidden" id="inputModalID" name="inputModalID" value="<?php printf("$a->id"); ?>">
-                          <button type="submit" name="loginModal" id="btn-loginModal" value="Entrar" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar venda</i>
+                      <form id="cancelarVenda" action="" method="post">
+                          <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf("$a->id"); ?>">
+                          <button type="submit" name="cancelarVenda" id="btn-loginModal" value="cancelarVenda" class="btn btn-primary ml-2 text-white"><i class="fas fa-ban"> Cancelar venda</i>
                         </form>
                     <?php } // Fim else admin botao modal?>
                 </td>

@@ -227,14 +227,16 @@ class VendaDB{
        }//Fecha catch
     }
 
-    public function excluirVenda($venda){
-    /*  try {
-          $stat = $this->conexao->prepare("");
-          //$stat->execute();
+    public function cancelarVenda($v){
+      try {
+          $stat = $this->conexao->prepare("DELETE FROM vendaprodutos WHERE idvendas = $v");
+          $stat->execute();
+          $stat = $this->conexao->prepare("DELETE FROM `vendas` WHERE id = $v");
+          $stat->execute();
           $this->conexao = null;
       } catch (PDOException $ex) {
           echo "Erro ao cadastrar usuário! ".$ex;
-      }//Fecha catch*/
+      }//Fecha catch
     }
 
     public function removeProduto($venda){
