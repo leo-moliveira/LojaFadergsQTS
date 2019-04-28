@@ -92,6 +92,17 @@ include_once 'model/produto.class.php';
               <?php
             }
           }
+
+          if(isset($_POST['addProdutoModal'])){
+            $v = new Venda;
+            $v->id = $_POST['inputVendaID'];
+            $v->produto = $_POST['inputPordutoModal'];
+            $v->quantidade = $_POST['inputQuantidadeModal'];
+            $v->status = 0;
+            $vendasDB = new VendaDB;
+            $vendasDB->adicionaProduto($v);
+          }
+          //////
             $vendasDB = new VendaDB;
             $array = $vendasDB->buscaVenda($venda->id);?>
 
@@ -112,7 +123,7 @@ include_once 'model/produto.class.php';
                   <div class="modal-body">
                     <div class="alert alert-info" role="alert"> Selecione o produto e informe a quantidade </div>
                     <div>
-                      <form>
+                      <form id="addProdutoModal" action="" method="post">
                         <div class="form-group">
                          <select class="custom-select" id="inputPordutoModal" name="inputPordutoModal">
                       <?php
@@ -125,6 +136,8 @@ include_once 'model/produto.class.php';
                       </div>
                       <div class="form-group">
                         <input type="number" id="inputQuantidadeModal" name="inputQuantidadeModal" placeholder="Quantiade" min="1" required>
+                        <input type="hidden" id="retomaVenda" name="retomaVenda" value="retomaVenda">
+                        <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf($_POST['inputVendaID']); ?>">
                       </div>
                     </div>
                   </div>

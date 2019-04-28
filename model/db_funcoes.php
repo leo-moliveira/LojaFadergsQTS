@@ -246,7 +246,20 @@ class VendaDB{
           echo "Erro ao cadastrar usuário! ".$ex;
       }//Fecha catch
     }
-  }
 
+    public function adicionaProduto($venda){
+      try {
+          $stat = $this->conexao->prepare("INSERT INTO `vendaprodutos`(`idVendas`, `idProduto`, `quantidade`)
+          VALUES (?,(SELECT id FROM produtos WHERE Nome like ?),?)");
+          $stat->bindValue(1,$venda->id);
+          $stat->bindValue(2,$venda->produto);
+          $stat->bindValue(3,$venda->quantidade);
+          $stat->execute();
+          $this->conexao = null;
+      } catch (PDOException $ex) {
+          echo "Erro ao cadastrar usuário! ".$ex;
+      }//Fecha catch
+    }
+  }
 /* ########################################################################################################################################################################## */
 ?>
