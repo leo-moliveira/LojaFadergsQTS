@@ -54,7 +54,56 @@ if(isset($_POST['listarProdutos'])){
 }
 
 if(isset($_POST['cadastrarProdutos'])){
+  $uC = new Usuario;
+  if($u->Grupo == "Administrador"){
+    $uC = $u;
+  }else{
+    $uC->Login = $_POST['inputLoginModal'];
+    $uC->Senha = Seguranca::criptografar($_POST['inputPasswordModal']);
+  }
+  $uDB = new UsuarioDB();
+  $usuario = $uDB->verificaUsuario($uC);
+
+  if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ ?>
+
+  <button type="button" id="btmodalCadastroProduto" name="cadastrarProdutos" data-toggle="modal" data-target="#modalCadastroProduto" class="btn btn-primary text-white" hidden="hidden"><i class="fab fa-product-hunt"></i></button>
+  <div class="modal fade" id="modalCadastroProduto" tabindex="-1" role="dialog" aria-labelledby="modalCadastroProduto" aria-hidden="true">
+    <div class="modal-dialog" role="form">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <h5 class="modal-title fas fa-times" id="cadastrarProdutosModal"> Cadastro de Produto!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="alert alert-danger" role="alert"> Informe o produto a quantidade e o valor! </div>
+              <form id="modalCadastroProduto" action="" method="post">
+                  <div class="form-group ">
+                      <input type="text" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
+                  </div>
+                  <div class="form-group">
+                      <input type="password" class="form-control" id="inputPasswordModal" name="inputPasswordModal" placeholder="Senha">
+                  </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" name="cadastrarProdutos" id="btn-loginModal" value="cadastrarProdutos" class="btn btn-primary ml-2 text-white"><i class="fas fa-sign-in-alt"> Entrar</i>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>$("#btmodalCadastroProduto").click(); </script>
+  <?php }else{
+
+  }
+  unset($_POST['cadastrarProdutos']);
 }
+
+
 
 if(isset($_POST['buscarProdutos'])){
   $prodDB = new ProdutoDB();
@@ -71,9 +120,41 @@ if(isset($_POST['buscarProdutos'])){
       <p class="h3">Produtos</p>
         <div class="row py-2 ">
         <div class="col-md-3">
+          <?php if($u->Grupo =="Administrador"){ ?>
             <form id="cadastrarProdutos" action="" method="post">
               <button type="submit" name="cadastrarProdutos" data-toggle="modal" data-target="" class="btn btn-primary text-white" valeu="cadastrarProdutos"><i class="fab fa-product-hunt"> Cadastrar Produto</i></button>
-            </form>
+            </form> <?php }else{ ?>
+              <button type="button" id="teste" name="cadastrarProdutos" data-toggle="modal" data-target="#cadastrarProdutosModal" class="btn btn-primary text-white"><i class="fab fa-product-hunt"> Cadastrar Produto</i></button>
+
+              <div class="modal fade" id="cadastrarProdutosModal" tabindex="-1" role="dialog" aria-labelledby="cadastrarProdutosModal" aria-hidden="true">
+                <div class="modal-dialog" role="form">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title fas fa-times" id="cadastrarProdutosModal"> Acesso Negado!</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+                      <div class="alert alert-danger" role="alert"> Necessário ser administrador para  Cadastrar Produto! </div>
+                          <form id="cadastrarProdutos" action="" method="post">
+                              <div class="form-group ">
+                                  <input type="text" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
+                              </div>
+                              <div class="form-group">
+                                  <input type="password" class="form-control" id="inputPasswordModal" name="inputPasswordModal" placeholder="Senha">
+                              </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" name="cadastrarProdutos" id="btn-loginModal" value="cadastrarProdutos" class="btn btn-primary ml-2 text-white"><i class="fas fa-sign-in-alt"> Entrar</i>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <?php }?>
         </div>
         <div class="col-md-3">
           <form id="listarProdutos" action="" method="post">

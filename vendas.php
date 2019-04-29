@@ -266,7 +266,7 @@ include_once 'model/produto.class.php';
                             <form id="cancelarVenda" action="" method="post">
                                 <div class="form-group ">
                                     <input type="hidden" id="inputVendaID" name="inputVendaID" value="<?php printf($_POST['inputVendaID']); ?>">
-                                    <input type="int" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
+                                    <input type="text" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
                                 </div>
                                 <div class="form-group">
                                     <input type="password" class="form-control" id="inputPasswordModal" name="inputPasswordModal" placeholder="Senha">
