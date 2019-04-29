@@ -47,19 +47,43 @@ include_once 'model/produto.class.php';
   </nav>
 
 <!--Corpo-->
+<?php
+if(isset($_POST['listarProdutos'])){
+  unset($_POST);
+  header("location:produtos.php");
+}
+
+if(isset($_POST['cadastrarProdutos'])){
+}
+
+if(isset($_POST['buscarProdutos'])){
+  $prodDB = new ProdutoDB();
+  $array = $prodDB->listaProdutos();
+}else{
+  $prodDB = new ProdutoDB();
+  $array = $prodDB->listaProdutos();
+}
+
+?>
 <div class="py-4">
   <div class="container py-4">
     <div class="jumbotron text-center">
       <p class="h3">Produtos</p>
         <div class="row py-2 ">
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fab fa-product-hunt"> Cadastrar Produto</i></button>
+            <form id="cadastrarProdutos" action="" method="post">
+              <button type="submit" name="cadastrarProdutos" data-toggle="modal" data-target="" class="btn btn-primary text-white" valeu="cadastrarProdutos"><i class="fab fa-product-hunt"> Cadastrar Produto</i></button>
+            </form>
         </div>
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fab fa-product-hunt"> Listar Produto</i></button>
+          <form id="listarProdutos" action="" method="post">
+            <button type="submit" name="listarProdutos" data-toggle="modal" data-target="" class="btn btn-primary text-white" value="listarProdutos"><i class="fab fa-product-hunt"> Listar Produtos</i></button>
+          </form>
         </div>
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fab fa-product-hunt"> Buscar Produto</i></button>
+          <form id="buscarProdutos" action="" method="post">
+            <button type="submit" name="buscarProdutos" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fab fa-product-hunt"> Buscar Produto</i></button>
+          </form>
         </div>
         <div class="table-responsive py-2">
           <table class="table table-striped">
@@ -77,8 +101,6 @@ include_once 'model/produto.class.php';
             </thead>
             <tbody>
               <?php
-              $prodDB = new ProdutoDB();
-              $array = $prodDB->listaProdutos();
               foreach($array as $a){?>
                 <tr>
                   <th scope="row"><button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-edit"> <?php printf("$a->id"); ?></i></button></th>

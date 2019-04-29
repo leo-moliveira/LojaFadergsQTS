@@ -47,19 +47,42 @@ include_once 'model/fornecedor.class.php';
   </nav>
 
 <!--Corpo-->
+<?php
+if(isset($_POST['listarFornecedores'])){
+  unset($_POST);
+  header("location:produtos.php");
+}
+
+if(isset($_POST['cadastrarFornecedores'])){
+}
+
+if(isset($_POST['buscarFornecedores'])){
+  $fornecDB= new FornecedorDB();
+  $array = $fornecDB->busca(NULL,NULL);
+}else{
+  $fornecDB= new FornecedorDB();
+  $array = $fornecDB->busca(NULL,NULL);
+}
+ ?>
 <div class="py-4">
   <div class="container py-4">
     <div class="jumbotron text-center">
       <p class="h3">Fornecedores</p>
         <div class="row py-2 ">
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building"> Cadastrar Fornecedor</i></button>
+          <form id="cadastrarFornecedores" action="" method="post">
+            <button type="submit" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building"> Cadastrar Fornecedor</i></button>
+          </form>
         </div>
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building"> Listar Fornecedores</i></button>
+          <form id="listarFornecedores" action="" method="post">
+            <button type="submit" name="listarFornecedores" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building" value="listarFornecedores"> Listar Fornecedores</i></button>
+          </form>
         </div>
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building"> Buscar Fornecedor</i></button>
+          <form id="buscarFornecedores" action="" method="post">
+            <button type="submit" name="buscarFornecedores" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building" value="buscarFornecedores"> Buscar Fornecedor</i></button>
+          </form>
         </div>
         <div class="table-responsive py-2">
           <table class="table table-striped">
@@ -74,8 +97,6 @@ include_once 'model/fornecedor.class.php';
             </thead>
             <tbody>
               <?php
-              $fornecDB= new FornecedorDB();
-              $array = $fornecDB->busca(NULL,NULL);
               foreach($array as $a){?>
                 <tr>
                   <th scope="row"><button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-pen-nib"> <br><?php printf("$a->id"); ?></i></button></th>

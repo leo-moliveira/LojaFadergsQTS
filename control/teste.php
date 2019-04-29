@@ -51,6 +51,7 @@ $produtoDB->exluirProduto($produto);
 //8	Pepsi	3		0	100	10	100	1222
 $produtoDB = new ProdutoDB;
 $array = $produtoDB->listaProdutos();
+
 foreach($array as $a){
   echo "<table>";
               echo "<tr>";
