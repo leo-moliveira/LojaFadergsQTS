@@ -81,7 +81,7 @@ include_once 'model/produto.class.php';
               $array = $prodDB->listaProdutos();
               foreach($array as $a){?>
                 <tr>
-                  <th scope="row"><?php printf("$a->id"); ?></th>
+                  <th scope="row"><button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-edit"> <?php printf("$a->id"); ?></i></button></th>
                     <td><?php printf ("$a->Nome"); ?></td>
                     <td><?php printf ("$a->Tipo"); ?></td>
                     <td><?php printf ("$a->Valor"); ?></td>

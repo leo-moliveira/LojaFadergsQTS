@@ -78,7 +78,7 @@ include_once 'model/fornecedor.class.php';
               $array = $fornecDB->busca(NULL,NULL);
               foreach($array as $a){?>
                 <tr>
-                  <th scope="row"><?php printf("$a->id"); ?></th>
+                  <th scope="row"><button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-pen-nib"> <br><?php printf("$a->id"); ?></i></button></th>
                     <td><?php printf ("$a->Nome"); ?></td>
                     <td><?php printf ("$a->CNPJ"); ?></td>
                     <td><?php printf ("$a->Endereco"); ?></td>
