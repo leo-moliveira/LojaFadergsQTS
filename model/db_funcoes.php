@@ -314,7 +314,7 @@ class VendaDB{
           $stat = $this->conexao->query("SELECT AUTO_INCREMENT
                                           FROM   information_schema.tables
                                           WHERE  table_name = 'vendas'
-                                          AND    table_schema = 'estqcontrole' ;");
+                                          AND    table_schema = 'estqcontrole'");
           $id = $stat->fetch();
           $this->conexao = null;
       } catch (PDOException $ex) {

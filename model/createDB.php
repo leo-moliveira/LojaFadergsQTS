@@ -38,7 +38,6 @@ class CriaDB{
 }
 
 $query="
-
 SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -212,7 +211,8 @@ INSERT INTO `vendaprodutos` (`idVendas`, `idProduto`, `quantidade`) VALUES
 (1, 1, 5),
 (1, 2, 15),
 (1, 4, 10),
-(2, 6, 10);
+(2, 6, 10),
+(1, 6, 2);
 
 -- --------------------------------------------------------
 
@@ -279,8 +279,8 @@ ALTER TABLE `tipo`
 -- Indexes for table `vendaprodutos`
 --
 ALTER TABLE `vendaprodutos`
-  ADD KEY `idVendas` (`idVendas`),
-  ADD KEY `idProduto` (`idProduto`);
+  ADD KEY `idProduto` (`idProduto`),
+  ADD KEY `idVendas` (`idVendas`);
 
 --
 -- Indexes for table `vendas`
@@ -317,6 +317,12 @@ ALTER TABLE `tipo`
   MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `vendas`
+--
+ALTER TABLE `vendas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -342,8 +348,8 @@ ALTER TABLE `produtos`
 -- Limitadores para a tabela `vendaprodutos`
 --
 ALTER TABLE `vendaprodutos`
-  ADD CONSTRAINT `vendaprodutos_ibfk_1` FOREIGN KEY (`idVendas`) REFERENCES `vendas` (`id`),
-  ADD CONSTRAINT `vendaprodutos_ibfk_2` FOREIGN KEY (`idProduto`) REFERENCES `produtos` (`id`);
+  ADD CONSTRAINT `vendaprodutos_ibfk_2` FOREIGN KEY (`idProduto`) REFERENCES `produtos` (`id`),
+  ADD CONSTRAINT `vendaprodutos_ibfk_3` FOREIGN KEY (`idVendas`) REFERENCES `vendas` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

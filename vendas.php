@@ -118,8 +118,9 @@ include_once 'model/produto.class.php';
 
     if(isset($_POST['addVenda'])){ //inicio if testa
       $venda = new VendaDB;
+
       $venda= $venda->incluiVenda();
-      $_POST['inputVendaID']=$venda['AUTO_INCREMENT'];
+      $_POST['inputVendaID'] = $venda['AUTO_INCREMENT'];
       } //fim if testa POST exlusão
     ?>
     <div class="jumbotron text-center">
