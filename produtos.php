@@ -53,13 +53,13 @@ include_once 'model/produto.class.php';
       <p class="h3">Produtos</p>
         <div class="row py-2 ">
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class=""> Cadastrar Produto</i></button>
+          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fab fa-product-hunt"> Cadastrar Produto</i></button>
         </div>
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class=""> Listar Produto</i></button>
+          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fab fa-product-hunt"> Listar Produto</i></button>
         </div>
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class=""> Buscar Produto</i></button>
+          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fab fa-product-hunt"> Buscar Produto</i></button>
         </div>
         <div class="table-responsive py-2">
           <table class="table table-striped">
@@ -90,7 +90,7 @@ include_once 'model/produto.class.php';
                     <td><?php printf ("$a->EstqMin"); ?></td>
                     <td><?php printf ("$a->EstqEntrada"); ?></td>
                     <td><?php printf ("$a->Fornecedor"); ?></td>
-                    <td><button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class=""> Excluir</i></button></td>
+                    <td><button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="far fa-trash-alt"> Excluir</i></button></td>
                 <?php } //fim foreach imprimi produtos?>
             </tbody>
           </table>

@@ -53,13 +53,13 @@ include_once 'model/fornecedor.class.php';
       <p class="h3">Fornecedores</p>
         <div class="row py-2 ">
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class=""> Cadastrar Fornecedor</i></button>
+          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building"> Cadastrar Fornecedor</i></button>
         </div>
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class=""> Listar Fornecedores</i></button>
+          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building"> Listar Fornecedores</i></button>
         </div>
         <div class="col-md-3">
-          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class=""> Buscar Fornecedor</i></button>
+          <button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="fas fa-building"> Buscar Fornecedor</i></button>
         </div>
         <div class="table-responsive py-2">
           <table class="table table-striped">
@@ -85,7 +85,7 @@ include_once 'model/fornecedor.class.php';
                     <td><?php printf ("$a->Email"); ?></td>
                     <td><?php printf ("$a->Estado"); ?></td>
 
-                    <td><button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class=""> Excluir</i></button></td>
+                    <td><button type="button" name="" data-toggle="modal" data-target="" class="btn btn-primary text-white"><i class="far fa-trash-alt"> Excluir</i></button></td>
                 <?php } //fim foreach imprimi produtos?>
             </tbody>
           </table>
