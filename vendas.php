@@ -120,7 +120,7 @@ include_once 'model/produto.class.php';
       $venda = new VendaDB;
 
       $venda= $venda->incluiVenda();
-      $_POST['inputVendaID'] = $venda['AUTO_INCREMENT'];
+      $_POST['inputVendaID'] = $venda['AUTO_INCREMENT'] - 1;
       } //fim if testa POST exlusão
     ?>
     <div class="jumbotron text-center">

@@ -293,7 +293,6 @@ class VendaDB{
                                             SET
                                               produtos.vendas = produtos.vendas - vendaprodutos.quantidade,
                                               produtos.EstqLoja = produtos.EstqLoja + vendaprodutos.quantidade
-
                                             WHERE
                                               vendaprodutos.idVendas = $v");
           $stat->execute();
