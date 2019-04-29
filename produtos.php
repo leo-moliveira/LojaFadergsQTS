@@ -55,6 +55,9 @@ if(isset($_POST['listarProdutos'])){
 
 if(isset($_POST['cadastrarProdutos'])){
   $uC = new Usuario;
+  if(isset($_POST['fcadastrarProdutos'])){
+    var_dump($_POST);exit;
+  }else{
   if($u->Grupo == "Administrador"){
     $uC = $u;
   }else{
@@ -63,7 +66,6 @@ if(isset($_POST['cadastrarProdutos'])){
   }
   $uDB = new UsuarioDB();
   $usuario = $uDB->verificaUsuario($uC);
-
   if($usuario && !is_null($usuario) && $usuario->Grupo == "Administrador"){ ?>
 
   <button type="button" id="btmodalCadastroProduto" name="cadastrarProdutos" data-toggle="modal" data-target="#modalCadastroProduto" class="btn btn-primary text-white" hidden="hidden"><i class="fab fa-product-hunt"></i></button>
@@ -80,7 +82,7 @@ if(isset($_POST['cadastrarProdutos'])){
         <div class="modal-body">
 
           <div class="alert alert-info" role="alert"> Informe o produto a quantidade e o valor! </div>
-              <form id="modalCadastroProduto" action="" method="post">
+              <form id="fcadastrarProdutos" action="" method="post">
                   <div class="form-group ">
 
                       <input type="text" class="form-control" id="inputProdutoModal" name="inputProdutoModal" placeholder="Produto">
@@ -90,7 +92,7 @@ if(isset($_POST['cadastrarProdutos'])){
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" name="cadastrarProdutos" id="btn-loginModal" value="cadastrarProdutos" class="btn btn-primary ml-2 text-white"><i class="fas fa-sign-in-alt"> Cadastrar</i>
+          <button type="submit" name="fcadastrarProdutos" id="btn-loginModal" value="fcadastrarProdutos" class="btn btn-primary ml-2 text-white"><i class="fas fa-sign-in-alt"> Cadastrar</i>
           </form>
         </div>
       </div>
@@ -98,8 +100,7 @@ if(isset($_POST['cadastrarProdutos'])){
   </div>
   <script>$("#btmodalCadastroProduto").click(); </script>
   <?php }else{
-
-  }
+  }}
   unset($_POST['cadastrarProdutos']);
 }
 

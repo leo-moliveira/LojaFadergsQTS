@@ -50,7 +50,7 @@ include_once 'model/fornecedor.class.php';
 <?php
 if(isset($_POST['listarFornecedores'])){
   unset($_POST);
-  header("location:produtos.php");
+  header("location:fornecedores.php");
 }
 
 if(isset($_POST['cadastrarFornecedores'])){
