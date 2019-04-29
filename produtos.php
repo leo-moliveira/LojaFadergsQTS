@@ -79,18 +79,18 @@ if(isset($_POST['cadastrarProdutos'])){
         </div>
         <div class="modal-body">
 
-          <div class="alert alert-danger" role="alert"> Informe o produto a quantidade e o valor! </div>
+          <div class="alert alert-info" role="alert"> Informe o produto a quantidade e o valor! </div>
               <form id="modalCadastroProduto" action="" method="post">
                   <div class="form-group ">
-                      <input type="text" class="form-control" id="inputLoginModal" name="inputLoginModal" placeholder="Login">
-                  </div>
-                  <div class="form-group">
-                      <input type="password" class="form-control" id="inputPasswordModal" name="inputPasswordModal" placeholder="Senha">
+
+                      <input type="text" class="form-control" id="inputProdutoModal" name="inputProdutoModal" placeholder="Produto">
+                      <input type="text" class="form-control" id="inputProdutoModal" name="inputProdutoModal" placeholder="Tipo">
+                      <input type="number" class="form-control" id="inputValorModal" name="inputValorModal" placeholder="Valor" min="000" max="10000.00" step="0.01" >
                   </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" name="cadastrarProdutos" id="btn-loginModal" value="cadastrarProdutos" class="btn btn-primary ml-2 text-white"><i class="fas fa-sign-in-alt"> Entrar</i>
+          <button type="submit" name="cadastrarProdutos" id="btn-loginModal" value="cadastrarProdutos" class="btn btn-primary ml-2 text-white"><i class="fas fa-sign-in-alt"> Cadastrar</i>
           </form>
         </div>
       </div>

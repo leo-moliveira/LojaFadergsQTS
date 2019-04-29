@@ -72,6 +72,7 @@ foreach($array as $a){
 
 /*
 
+
             private $id;
             private $Nome;
             private $CNPJ;
@@ -206,5 +207,7 @@ $venda = new VendaDB;
 
 $venda= $venda->incluiVenda();
 var_dump($venda);
-echo $venda['AUTO_INCREMENT'];*/
+echo $venda['AUTO_INCREMENT'];
+open modal <script>$("#teste").click() </script>
+*/
 ?>
