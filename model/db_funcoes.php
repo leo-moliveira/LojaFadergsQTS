@@ -119,7 +119,7 @@ class ProdutoDB{
 /*Lista produtos*/
   public function listaProdutos(){
     try {
-       $stat = $this->conexao->query("SELECT produtos.id, produtos.Nome,tipo.Nome AS 'Tipo',produtos.Vendas,produtos.EstqLoja,produtos.EstqMin,produtos.EstqEntrada,fornecedores.Nome AS 'Fornecedor'
+       $stat = $this->conexao->query("SELECT produtos.id, produtos.Nome,tipo.Nome AS 'Tipo',produtos.Valor,produtos.Vendas,produtos.EstqLoja,produtos.EstqMin,produtos.EstqEntrada,fornecedores.Nome AS 'Fornecedor'
                                       FROM produtos JOIN tipo ON produtos.idTipo=tipo.id
                                       JOIN fornecedores ON produtos.CodFornec=fornecedores.id");
        $array = $stat->fetchAll(PDO::FETCH_CLASS, 'Produto');

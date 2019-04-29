@@ -1,6 +1,7 @@
 <?php
 include '../model/db_funcoes.php';
 include '../model/venda.class.php';
+include '../model/produto.class.php';
 
 /*
 include 'usuario.class.php';
@@ -43,11 +44,13 @@ echo "<br>";
 echo "<br>";
 echo "<br>";
 $produtoDB->exluirProduto($produto);
-
+*/
 
 //$array=NULL;
 //$array = $produtoDB->listaProdutos();
 //8	Pepsi	3		0	100	10	100	1222
+$produtoDB = new ProdutoDB;
+$array = $produtoDB->listaProdutos();
 foreach($array as $a){
   echo "<table>";
               echo "<tr>";
@@ -196,11 +199,11 @@ SET
 
 WHERE
   vendaprodutos.idVendas = 2
-*/
+
 
 $venda = new VendaDB;
 
 $venda= $venda->incluiVenda();
 var_dump($venda);
-echo $venda['AUTO_INCREMENT'];
+echo $venda['AUTO_INCREMENT'];*/
 ?>

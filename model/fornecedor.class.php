@@ -19,7 +19,7 @@ class Fornecedor{
   }//Fecha __set
 
   public function __toString(){
-    return nl2br("Nome: $this->Nome Tipo: $this->Tipo Valor: $this->Valor Estoque: $this->EstqLoja");
+    return nl2br("Nome: $this->Nome CNPJ: $this->CNPJ Endereço: $this->Endereco Email: $this->Email Estado: $this->Estado");
   }//Fecha __toString
 }//Fecha class
 ?>
