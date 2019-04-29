@@ -73,6 +73,12 @@ ob_start();
           <div>
             <h2 >Seja bem vindo!!</h2>
             <p>Para acessar favor entrar com seu login e senha!</p>
+
+            <?php if(isset($_POST['Entrar'])){ ?>
+              <div class="alert alert-danger" role="alert"> Usuário ou senha invalidos!! </div>
+            <?php } ?>
+
+
           </div>
           <div>
           <form id="Login" action="" method="post">
@@ -103,8 +109,6 @@ ob_start();
         $u->Login = $Login;
         $u->Senha = $Senha;
 
-        var_dump($u);
-
         $uDB = new UsuarioDB();
         $usuario = $uDB->verificaUsuario($u);
 
@@ -112,9 +116,8 @@ ob_start();
           $_SESSION['privateUser'] = serialize($usuario);
           header("location:index.php");
         }else{
-          echo "ERRO!!";
+
         }
-        unset($_POST['entrar']);
       }
        ?>
 </div>
